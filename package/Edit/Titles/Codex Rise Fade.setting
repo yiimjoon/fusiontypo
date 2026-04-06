@@ -1,0 +1,188 @@
+{
+	Tools = ordered() {
+		CodexRiseFade = GroupOperator {
+			CtrlWZoom = false,
+			Inputs = ordered() {
+				Input1 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "StyledText",
+					Name = "Text",
+				},
+				Input2 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Font",
+					Name = "Font",
+					ControlGroup = 2,
+				},
+				Input3 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Style",
+					ControlGroup = 2,
+				},
+				Input4 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Size",
+					Name = "Size",
+					Default = 0.12,
+				},
+				Input5 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Center",
+					Name = "Position",
+				},
+				Input6 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "CharacterSpacing",
+					Name = "Tracking",
+					Default = 1,
+				},
+				Input7 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Red1",
+					Name = "Color",
+					ControlGroup = 6,
+					Default = 1,
+				},
+				Input8 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Green1",
+					ControlGroup = 6,
+					Default = 1,
+				},
+				Input9 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Blue1",
+					ControlGroup = 6,
+					Default = 1,
+				},
+				Input10 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "Alpha1",
+					ControlGroup = 6,
+					Default = 1,
+				},
+				Input11 = InstanceInput {
+					SourceOp = "Follower1",
+					Source = "Delay",
+					Name = "Character Stagger",
+					Default = 0,
+				}
+			},
+			Outputs = {
+				MainOutput1 = InstanceOutput {
+					SourceOp = "Text1",
+					Source = "Output",
+					Name = "Output",
+				}
+			},
+			ViewInfo = GroupInfo {
+				Pos = { 209, 49.5 },
+				Flags = {
+					AllowPan = false,
+					ConnectedSnap = true,
+					AutoSnap = true,
+					RemoveRouters = true
+				},
+				Size = { 289, 66.3636, 144.5, 24.2424 },
+				Direction = "Horizontal",
+				PipeStyle = "Direct",
+				Scale = 1,
+				Offset = { 0, 0 }
+			},
+			Tools = ordered() {
+				Text1 = TextPlus {
+					ExtentSet = true,
+					CtrlWShown = false,
+					NameSet = true,
+					Inputs = {
+						GlobalOut = Input { Value = 20000, },
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+						Center = Input { Value = { 0.5, 0.5 }, },
+						CharacterSpacing = Input { Value = 1, },
+						Red1 = Input { Value = 1, },
+						Green1 = Input { Value = 1, },
+						Blue1 = Input { Value = 1, },
+						Alpha1 = Input { Value = 1, },
+						StyledText = Input {
+							SourceOp = "Follower1",
+							Source = "StyledText",
+						},
+						Font = Input { Value = "Open Sans", },
+						Style = Input { Value = "Bold", },
+						Size = Input { Value = 0.12, },
+						VerticalTopCenterBottom = Input { Value = 1, },
+						VerticalJustificationNew = Input { Value = 3, },
+						HorizontalLeftCenterRight = Input { Value = 0, },
+						HorizontalJustificationNew = Input { Value = 3, },
+						ManualFontKerningPlacement = Input {
+							Value = StyledText {
+								Array = {
+								},
+								Value = ""
+							},
+						},
+					},
+					ViewInfo = OperatorInfo { Pos = { 0, 8.75758 } },
+				},
+				Follower1 = StyledTextFollower {
+					Inputs = {
+						Transform1 = Input { Value = 1, },
+						Delay = Input { Value = 0, },
+						Text = Input {
+							Value = StyledText {
+								Array = {
+								},
+								Value = "YOUR TITLE"
+							},
+						},
+						Opacity1 = Input {
+							SourceOp = "Follower1Opacity",
+							Source = "Value",
+						},
+						Offset1 = Input {
+							SourceOp = "Path1",
+							Source = "Position",
+						},
+					},
+				},
+				Follower1Opacity = BezierSpline {
+					SplineColor = { Red = 179, Green = 28, Blue = 244 },
+					NameSet = true,
+					KeyFrames = {
+						[0] = { 0, RH = { 12, 0.08 }, Flags = { Linear = true } },
+						[48] = { 1, LH = { 36, 1 } }
+					}
+				},
+				Path1 = PolyPath {
+					DrawMode = "InsertAndModify",
+					Inputs = {
+						Displacement = Input {
+							SourceOp = "Path1Displacement",
+							Source = "Value",
+						},
+						PolyLine = Input {
+							Value = Polyline {
+								Points = {
+									{ Linear = true, LockY = true, X = -0.5, Y = -1.3, RX = 0, RY = 0.433333333333333 },
+									{ Linear = true, LockY = true, X = -0.5, Y = -0.5, LX = 0, LY = -0.266666666666667 }
+								}
+							},
+						},
+					},
+				},
+				Path1Displacement = BezierSpline {
+					SplineColor = { Red = 255, Green = 0, Blue = 255 },
+					NameSet = true,
+					KeyFrames = {
+						[0] = { 0, RH = { 12, 0.08 }, Flags = { Linear = true, LockedY = true } },
+						[48] = { 1, LH = { 36, 1 }, Flags = { LockedY = true } }
+					}
+				}
+			},
+		}
+	},
+	ActiveTool = "CodexRiseFade"
+}
