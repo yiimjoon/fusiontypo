@@ -1,6 +1,6 @@
 {
 	Tools = ordered() {
-		CodexRiseFadePro = GroupOperator {
+		CodexRiseFadeProAlt = GroupOperator {
 			CtrlWZoom = false,
 			Inputs = ordered() {
 				Input1 = InstanceInput {
@@ -80,45 +80,85 @@
 					Width = 0.5,
 				},
 				Input14 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "XOffset",
+					Name = "X Offset",
+					Default = 0,
+					Width = 0.5,
+				},
+				Input15 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "YOffset",
+					Name = "Y Offset",
+					Default = 0,
+					Width = 0.5,
+				},
+				Input16 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "FadeStrength",
+					Name = "Fade Strength",
+					Default = 1,
+					Width = 0.5,
+				},
+				Input17 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "OvershootStrength",
+					Name = "Overshoot Strength",
+					Default = 0.35,
+					Width = 0.5,
+				},
+				Input18 = InstanceInput {
+					SourceOp = "Blur1",
+					Source = "BlurAmount",
+					Name = "Blur",
+					Default = 0,
+				},
+				Input19 = InstanceInput {
 					SourceOp = "IntroBlur",
 					Source = "Scale",
 					Name = "Intro Blur",
 					Default = 5,
 				},
-				Input15 = InstanceInput {
+				Input20 = InstanceInput {
 					SourceOp = "OutroBlur",
 					Source = "Scale",
 					Name = "Outro Blur",
 					Default = 5,
 				},
-				Input16 = InstanceInput {
+				Input21 = InstanceInput {
 					SourceOp = "Follower1",
 					Source = "Delay",
 					Name = "Character Stagger",
 					Default = 0,
 				},
-				Input17 = InstanceInput {
+				Input22 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "MotionBlur",
 					Name = "Motion Blur",
 					Default = 1,
 				},
-				Input18 = InstanceInput {
+				Input23 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "Quality",
 					Name = "Quality",
 					Default = 2,
 				},
-				Input19 = InstanceInput {
+				Input24 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "ShutterAngle",
 					Name = "Shutter Angle",
 					Default = 180,
+				},
+				Input25 = InstanceInput {
+					SourceOp = "TimeStretcher1",
+					Source = "PosterizeFrames",
+					Name = "Posterize Frames",
+					Default = 1,
 				}
 			},
 			Outputs = {
 				MainOutput1 = InstanceOutput {
-					SourceOp = "Text1",
+					SourceOp = "TimeStretcher1",
 					Source = "Output",
 					Name = "Output",
 				}
@@ -178,6 +218,116 @@
 					},
 					ViewInfo = OperatorInfo { Pos = { 0, 8.75758 } },
 				},
+				Transform1 = Transform {
+					CtrlWZoom = false,
+					UserControls = ordered() {
+						XOffset = {
+							LINKS_Name = "X Offset",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 0,
+							INP_MinScale = -2,
+							INP_MaxScale = 2,
+						},
+						YOffset = {
+							LINKS_Name = "Y Offset",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 0,
+							INP_MinScale = -2,
+							INP_MaxScale = 2,
+						},
+						FadeStrength = {
+							LINKS_Name = "Fade Strength",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 1,
+							INP_MinScale = 0,
+							INP_MaxScale = 3,
+						},
+						OvershootStrength = {
+							LINKS_Name = "Overshoot Strength",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 0.35,
+							INP_MinScale = 0,
+							INP_MaxScale = 2,
+						},
+					},
+					Inputs = {
+						Input = Input {
+							SourceOp = "Text1",
+							Source = "Output",
+						},
+						XOffset = Input { Value = 0, },
+						YOffset = Input { Value = 0, },
+						FadeStrength = Input { Value = 1, },
+						OvershootStrength = Input { Value = 0.35, },
+						Center = Input {
+							Expression = "Point(Text1.Center.X + Transform1.XOffset * (1 - IntroMotion.Value) - Transform1.XOffset * Transform1.OvershootStrength * (4 * IntroMotion.Value * IntroMotion.Value * IntroMotion.Value * IntroMotion.Value * (1 - IntroMotion.Value)), Text1.Center.Y + Transform1.YOffset * (1 - IntroMotion.Value) - Transform1.YOffset * Transform1.OvershootStrength * (4 * IntroMotion.Value * IntroMotion.Value * IntroMotion.Value * IntroMotion.Value * (1 - IntroMotion.Value)))",
+						},
+					},
+					ViewInfo = OperatorInfo { Pos = { 140, 8.75758 } },
+				},
+				Blur1 = Blur {
+					CtrlWZoom = false,
+					UserControls = ordered() {
+						BlurAmount = {
+							LINKS_Name = "Blur",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 0,
+							INP_MinScale = 0,
+							INP_MaxScale = 50,
+						},
+					},
+					Inputs = {
+						Input = Input {
+							SourceOp = "Transform1",
+							Source = "Output",
+						},
+						XBlurSize = Input {
+							Expression = "Blur1.BlurAmount",
+						},
+						YBlurSize = Input {
+							Expression = "Blur1.BlurAmount",
+						},
+						BlurAmount = Input { Value = 0, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 210, 8.75758 } },
+				},
+				TimeStretcher1 = TimeStretcher {
+					CtrlWZoom = false,
+					UserControls = ordered() {
+						PosterizeFrames = {
+							LINKS_Name = "Posterize Frames",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Integer = true,
+							INP_Default = 1,
+							INP_MinScale = 1,
+							INP_MaxScale = 12,
+						},
+					},
+					Inputs = {
+						SourceTime = Input {
+							Expression = "floor(time/TimeStretcher1.PosterizeFrames)*TimeStretcher1.PosterizeFrames",
+						},
+						InterpolateBetweenFrames = Input { Value = 0, },
+						Input = Input {
+							SourceOp = "Blur1",
+							Source = "Output",
+						},
+						PosterizeFrames = Input { Value = 1, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 280, 8.75758 } },
+				},
 				Follower1 = StyledTextFollower {
 					Inputs = {
 						Transform1 = Input { Value = 1, },
@@ -190,8 +340,7 @@
 							},
 						},
 						Opacity1 = Input {
-							SourceOp = "OpacityCalc",
-							Source = "Result",
+							Expression = "IntroMotion.Value * Transform1.FadeStrength * OutroHold.Value",
 						},
 						Offset1 = Input {
 							SourceOp = "Path1",
@@ -342,5 +491,5 @@
 			},
 		}
 	},
-	ActiveTool = "CodexRiseFadePro"
+	ActiveTool = "CodexRiseFadeProAlt"
 }

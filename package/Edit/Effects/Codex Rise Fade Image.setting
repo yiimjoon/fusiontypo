@@ -1,0 +1,184 @@
+{
+	Tools = ordered() {
+		CodexRiseFadeImage = GroupOperator {
+			CtrlWZoom = false,
+			Inputs = ordered() {
+				Input1 = InstanceInput {
+					SourceOp = "Merge1",
+					Source = "Center",
+					Name = "Position",
+				},
+				Input2 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "Size",
+					Name = "Scale",
+					Default = 0.5,
+				},
+				Input3 = InstanceInput {
+					SourceOp = "IntroMotion",
+					Source = "TimeScale",
+					Name = "Animation Speed",
+					Default = 2,
+				},
+				Input4 = InstanceInput {
+					SourceOp = "IntroMotion",
+					Source = "EaseIn",
+					Name = "Ease In",
+					Width = 0.5,
+				},
+				Input5 = InstanceInput {
+					SourceOp = "IntroMotion",
+					Source = "EaseOut",
+					Name = "Ease Out",
+					Width = 0.5,
+				},
+				Input6 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "XOffset",
+					Name = "X Offset",
+					Default = 0,
+					Width = 0.5,
+				},
+				Input7 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "YOffset",
+					Name = "Y Offset",
+					Default = -0.3,
+					Width = 0.5,
+				},
+			},
+			Outputs = {
+				MainOutput1 = InstanceOutput {
+					SourceOp = "MediaOut1",
+					Source = "Output",
+					Name = "Output",
+				}
+			},
+			ViewInfo = GroupInfo {
+				Pos = { 209, 49.5 },
+				Flags = {
+					AllowPan = false,
+					ConnectedSnap = true,
+					AutoSnap = true,
+					RemoveRouters = true
+				},
+				Size = { 320, 66.3636, 160, 24.2424 },
+				Direction = "Horizontal",
+				PipeStyle = "Direct",
+				Scale = 1,
+				Offset = { 0, 0 }
+			},
+			Tools = ordered() {
+				Background1 = Background {
+					CtrlWZoom = false,
+					Inputs = {
+						GlobalOut = Input { Value = 20000, },
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						TopLeftRed = Input { Value = 0, },
+						TopLeftGreen = Input { Value = 0, },
+						TopLeftBlue = Input { Value = 0, },
+						TopLeftAlpha = Input { Value = 0, },
+					},
+					ViewInfo = OperatorInfo { Pos = { -220, 55 } },
+				},
+				MediaIn1 = MediaIn {
+					CtrlWZoom = false,
+					ViewInfo = OperatorInfo { Pos = { -220, -55 } },
+				},
+				Transform1 = Transform {
+					CtrlWZoom = false,
+					UserControls = ordered() {
+						XOffset = {
+							LINKS_Name = "X Offset",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 0,
+							INP_MinScale = -2,
+							INP_MaxScale = 2,
+						},
+						YOffset = {
+							LINKS_Name = "Y Offset",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = -0.3,
+							INP_MinScale = -2,
+							INP_MaxScale = 2,
+						},
+					},
+					Inputs = {
+						Input = Input {
+							SourceOp = "MediaIn1",
+							Source = "Output",
+						},
+						Center = Input {
+							Expression = "Point(0.5 + Transform1.XOffset * (1 - IntroMotion.Value), 0.5 + Transform1.YOffset * (1 - IntroMotion.Value))",
+						},
+						Size = Input { Value = 0.5, },
+						XOffset = Input { Value = 0, },
+						YOffset = Input { Value = -0.3, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 0, -55 } },
+				},
+				IntroMotion = LUTLookup {
+					CtrlWZoom = false,
+					Inputs = {
+						Source = Input { Value = FuID { "Duration" }, },
+						Curve = Input { Value = FuID { "Easing" }, },
+						EaseIn = Input { Value = FuID { "Back" }, },
+						EaseOut = Input { Value = FuID { "Back" }, },
+						Lookup = Input {
+							SourceOp = "LinearLookup",
+							Source = "Value",
+						},
+						TimeScale = Input { Value = 2, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 0, 55 } },
+				},
+				LinearLookup = LUTBezier {
+					KeyColorSplines = {
+						[0] = {
+							[0] = { 0, RH = { 0.333333333333333, 0.333333333333333 }, Flags = { Linear = true } },
+							[1] = { 1, LH = { 0.666666666666667, 0.666666666666667 }, Flags = { Linear = true } }
+						}
+					},
+					SplineColor = { Red = 255, Green = 255, Blue = 255 },
+					ViewInfo = OperatorInfo { Pos = { 220, 55 } },
+				},
+				Merge1 = Merge {
+					CtrlWZoom = false,
+					Inputs = {
+						Background = Input {
+							SourceOp = "Background1",
+							Source = "Output",
+						},
+						Foreground = Input {
+							SourceOp = "Transform1",
+							Source = "Output",
+						},
+						Center = Input { Value = { 0.5, 0.5 }, },
+						Blend = Input {
+							SourceOp = "IntroMotion",
+							Source = "Value",
+						},
+					},
+					ViewInfo = OperatorInfo { Pos = { 220, -10 } },
+				},
+				MediaOut1 = MediaOut {
+					CtrlWZoom = false,
+					Inputs = {
+						Input = Input {
+							SourceOp = "Merge1",
+							Source = "Output",
+						},
+					},
+					ViewInfo = OperatorInfo { Pos = { 420, -10 } },
+				}
+			},
+		}
+	},
+	ActiveTool = "CodexRiseFadeImage"
+}
