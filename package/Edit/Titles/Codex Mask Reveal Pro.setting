@@ -1,6 +1,6 @@
 {
 	Tools = ordered() {
-		CodexRiseFadePro = GroupOperator {
+		CodexMaskRevealPro = GroupOperator {
 			CtrlWZoom = false,
 			Inputs = ordered() {
 				Input1 = InstanceInput {
@@ -81,59 +81,65 @@
 				},
 				Input14 = InstanceInput {
 					SourceOp = "Text1",
-					Source = "TravelDistance",
-					Name = "Travel Distance",
-					Default = 0.8,
+					Source = "Direction",
+					Name = "Direction",
+					Default = 2,
 				},
 				Input15 = InstanceInput {
+					SourceOp = "Text1",
+					Source = "TravelDistance",
+					Name = "Travel Distance",
+					Default = 0.45,
+				},
+				Input16 = InstanceInput {
 					SourceOp = "IntroBlur",
 					Source = "Scale",
 					Name = "Intro Blur",
-					Default = 5,
+					Default = 4,
 				},
-				Input16 = InstanceInput {
+				Input17 = InstanceInput {
+					SourceOp = "RevealMask",
+					Source = "SoftEdge",
+					Name = "Reveal Softness",
+					Default = 0.008,
+				},
+				Input18 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "OutroBlurAmount",
 					Name = "Outro Blur",
 					Default = 5,
 				},
-				Input17 = InstanceInput {
+				Input19 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "OutroLength",
 					Name = "Outro Fade Length",
 					Default = 0.18,
 				},
-				Input18 = InstanceInput {
+				Input20 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "StaggerAmount",
 					Name = "Character Stagger",
 					Default = 0,
 				},
-				Input19 = InstanceInput {
+				Input21 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "WholeTextMode",
 					Name = "Whole Text Mode",
 					Default = 0,
 				},
-				Input20 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "Direction",
-					Name = "Direction",
-					Default = 0,
-				},
-				Input21 = InstanceInput {
+				Input22 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "MotionBlur",
 					Name = "Motion Blur",
 					Default = 1,
 				},
-				Input22 = InstanceInput {
+				Input23 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "Quality",
 					Name = "Quality",
 					Default = 2,
 				},
-				Input23 = InstanceInput {
+				Input24 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "ShutterAngle",
 					Name = "Shutter Angle",
@@ -155,7 +161,7 @@
 					AutoSnap = true,
 					RemoveRouters = true
 				},
-				Size = { 388, 66.3636, 194, 24.2424 },
+				Size = { 422, 66.3636, 211, 24.2424 },
 				Direction = "Horizontal",
 				PipeStyle = "Direct",
 				Scale = 1,
@@ -181,6 +187,10 @@
 						Green1 = Input { Value = 1, },
 						Blue1 = Input { Value = 1, },
 						Alpha1 = Input { Value = 1, },
+						EffectMask = Input {
+							SourceOp = "RevealMask",
+							Source = "Mask",
+						},
 						StyledText = Input {
 							SourceOp = "Follower1",
 							Source = "StyledText",
@@ -199,12 +209,12 @@
 								Value = ""
 							},
 						},
-						TravelDistance = Input { Value = 0.8, },
+						TravelDistance = Input { Value = 0.45, },
 						OutroBlurAmount = Input { Value = 5, },
 						OutroLength = Input { Value = 0.18, },
 						StaggerAmount = Input { Value = 0, },
 						WholeTextMode = Input { Value = 0, },
-						Direction = Input { Value = 0, },
+						Direction = Input { Value = 2, },
 					},
 					ViewInfo = OperatorInfo { Pos = { 0, 8.75758 } },
 					UserControls = ordered() {
@@ -217,7 +227,7 @@
 							INPID_InputControl = "ComboControl",
 							CC_LabelPosition = "Horizontal",
 							LINKID_DataType = "Number",
-							INP_Default = 0,
+							INP_Default = 2,
 							INP_External = false,
 							ICS_ControlPage = "Controls",
 							LINKS_Name = "Direction",
@@ -300,6 +310,27 @@
 						},
 					},
 				},
+				RevealMask = RectangleMask {
+					Inputs = {
+						Filter = Input { Value = FuID { "Fast Gaussian" }, },
+						MaskWidth = Input { Value = 1920, },
+						MaskHeight = Input { Value = 1080, },
+						PixelAspect = Input { Value = { 1, 1 }, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						ClippingMode = Input { Value = FuID { "None" }, },
+						Center = Input {
+							Expression = "Point(iif(Text1.Direction == 2, 0.5 - ((1 - IntroMotion.Value) * 1.1), iif(Text1.Direction == 3, 0.5 + ((1 - IntroMotion.Value) * 1.1), 0.5)), iif(Text1.Direction == 0, 0.5 - ((1 - IntroMotion.Value) * 1.1), iif(Text1.Direction == 1, 0.5 + ((1 - IntroMotion.Value) * 1.1), 0.5)))",
+						},
+						Width = Input {
+							Expression = "iif(Text1.Direction == 2, 0.001 + (IntroMotion.Value * 2.2), iif(Text1.Direction == 3, 0.001 + (IntroMotion.Value * 2.2), 2.2))",
+						},
+						Height = Input {
+							Expression = "iif(Text1.Direction == 0, 0.001 + (IntroMotion.Value * 2.2), iif(Text1.Direction == 1, 0.001 + (IntroMotion.Value * 2.2), 2.2))",
+						},
+						SoftEdge = Input { Value = 0.008, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 176, 96 } },
+				},
 				IntroMotion = LUTLookup {
 					CtrlWZoom = false,
 					Inputs = {
@@ -332,7 +363,7 @@
 							SourceOp = "IntroBlurLookup",
 							Source = "Value",
 						},
-						Scale = Input { Value = 5, },
+						Scale = Input { Value = 4, },
 					},
 				},
 				IntroBlurLookup = LUTBezier {
@@ -364,5 +395,5 @@
 			},
 		}
 	},
-	ActiveTool = "CodexRiseFadePro"
+	ActiveTool = "CodexMaskRevealPro"
 }
