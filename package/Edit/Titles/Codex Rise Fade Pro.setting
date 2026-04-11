@@ -80,69 +80,51 @@
 					Width = 0.5,
 				},
 				Input14 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "TravelDistance",
-					Name = "Travel Distance",
-					Default = 0.8,
-				},
-				Input15 = InstanceInput {
 					SourceOp = "IntroBlur",
 					Source = "Scale",
 					Name = "Intro Blur",
 					Default = 5,
 				},
-				Input16 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "OutroBlurAmount",
+				Input15 = InstanceInput {
+					SourceOp = "OutroBlur",
+					Source = "Scale",
 					Name = "Outro Blur",
 					Default = 5,
 				},
-				Input17 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "OutroLength",
-					Name = "Outro Fade Length",
-					Default = 0.18,
-				},
-				Input18 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "StaggerAmount",
+				Input16 = InstanceInput {
+					SourceOp = "Follower1",
+					Source = "Delay",
 					Name = "Character Stagger",
 					Default = 0,
 				},
-				Input19 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "WholeTextMode",
-					Name = "Whole Text Mode",
-					Default = 0,
-				},
-				Input20 = InstanceInput {
-					SourceOp = "Text1",
-					Source = "Direction",
-					Name = "Direction",
-					Default = 0,
-				},
-				Input21 = InstanceInput {
+				Input17 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "MotionBlur",
 					Name = "Motion Blur",
 					Default = 1,
 				},
-				Input22 = InstanceInput {
+				Input18 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "Quality",
 					Name = "Quality",
 					Default = 2,
 				},
-				Input23 = InstanceInput {
+				Input19 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "ShutterAngle",
 					Name = "Shutter Angle",
 					Default = 180,
+				},
+				Input20 = InstanceInput {
+					SourceOp = "TimeStretcher1",
+					Source = "PosterizeFrames",
+					Name = "Stop Motion Frames",
+					Default = 1,
 				}
 			},
 			Outputs = {
 				MainOutput1 = InstanceOutput {
-					SourceOp = "Text1",
+					SourceOp = "TimeStretcher1",
 					Source = "Output",
 					Name = "Output",
 				}
@@ -155,7 +137,7 @@
 					AutoSnap = true,
 					RemoveRouters = true
 				},
-				Size = { 388, 66.3636, 194, 24.2424 },
+				Size = { 354, 66.3636, 177, 24.2424 },
 				Direction = "Horizontal",
 				PipeStyle = "Direct",
 				Scale = 1,
@@ -199,85 +181,40 @@
 								Value = ""
 							},
 						},
-						TravelDistance = Input { Value = 0.8, },
-						OutroBlurAmount = Input { Value = 5, },
-						OutroLength = Input { Value = 0.18, },
-						StaggerAmount = Input { Value = 0, },
-						WholeTextMode = Input { Value = 0, },
-						Direction = Input { Value = 0, },
 					},
 					ViewInfo = OperatorInfo { Pos = { 0, 8.75758 } },
+				},
+				TimeStretcher1 = TimeStretcher {
+					CtrlWZoom = false,
 					UserControls = ordered() {
-						Direction = {
-							{ CCS_AddString = "Up" },
-							{ CCS_AddString = "Down" },
-							{ CCS_AddString = "Left" },
-							{ CCS_AddString = "Right" },
+						PosterizeFrames = {
+							LINKS_Name = "Stop Motion Frames",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
 							INP_Integer = true,
-							INPID_InputControl = "ComboControl",
-							CC_LabelPosition = "Horizontal",
-							LINKID_DataType = "Number",
-							INP_Default = 0,
-							INP_External = false,
-							ICS_ControlPage = "Controls",
-							LINKS_Name = "Direction",
+							INP_Default = 1,
+							INP_MinScale = 1,
+							INP_MaxScale = 12,
 						},
-						WholeTextMode = {
-							CBC_TriState = false,
-							INP_Integer = false,
-							LINKID_DataType = "Number",
-							ICS_ControlPage = "Controls",
-							INPID_InputControl = "CheckboxControl",
-							LINKS_Name = "Whole Text Mode",
+					},
+					Inputs = {
+						SourceTime = Input {
+							Expression = "floor(time/TimeStretcher1.PosterizeFrames)*TimeStretcher1.PosterizeFrames",
 						},
-						TravelDistance = {
-							INP_Integer = false,
-							LINKID_DataType = "Number",
-							ICS_ControlPage = "Controls",
-							INPID_InputControl = "SliderControl",
-							INP_SplineType = "Default",
-							INP_MinScale = 0,
-							INP_MaxScale = 2,
-							LINKS_Name = "Travel Distance",
+						InterpolateBetweenFrames = Input { Value = 0, },
+						Input = Input {
+							SourceOp = "Text1",
+							Source = "Output",
 						},
-						OutroBlurAmount = {
-							INP_Integer = false,
-							LINKID_DataType = "Number",
-							ICS_ControlPage = "Controls",
-							INPID_InputControl = "SliderControl",
-							INP_SplineType = "Default",
-							INP_MinScale = 0,
-							INP_MaxScale = 20,
-							LINKS_Name = "Outro Blur Amount",
-						},
-						OutroLength = {
-							INP_Integer = false,
-							LINKID_DataType = "Number",
-							ICS_ControlPage = "Controls",
-							INPID_InputControl = "SliderControl",
-							INP_SplineType = "Default",
-							INP_MinScale = 0.05,
-							INP_MaxScale = 0.5,
-							LINKS_Name = "Outro Fade Length",
-						},
-						StaggerAmount = {
-							INP_Integer = false,
-							LINKID_DataType = "Number",
-							ICS_ControlPage = "Controls",
-							INPID_InputControl = "SliderControl",
-							INP_SplineType = "Default",
-							INP_MinScale = 0,
-							INP_MaxScale = 10,
-							LINKS_Name = "Stagger Amount",
-						}
-					}
+						PosterizeFrames = Input { Value = 1, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 70, 8.75758 } },
 				},
 				Follower1 = StyledTextFollower {
 					Inputs = {
 						Transform1 = Input { Value = 1, },
-						Delay = Input {
-							Expression = "iif(Text1.WholeTextMode > 0.5, 0, Text1.StaggerAmount)",
-						},
+						Delay = Input { Value = 0, },
 						Text = Input {
 							Value = StyledText {
 								Array = {
@@ -286,17 +223,21 @@
 							},
 						},
 						Opacity1 = Input {
-							Expression = "IntroMotion.Value * (1 - OutroRamp.Value)",
+							SourceOp = "OpacityCalc",
+							Source = "Result",
 						},
 						Offset1 = Input {
-							Expression = "Point(-0.5 + (((Text1.Direction == 2) and -1 or (Text1.Direction == 3) and 1 or 0) * (1 - IntroMotion.Value) * Text1.TravelDistance), -0.5 + (((Text1.Direction == 0) and -1 or (Text1.Direction == 1) and 1 or 0) * (1 - IntroMotion.Value) * Text1.TravelDistance))",
+							SourceOp = "Path1",
+							Source = "Position",
 						},
 						Softness1 = Input { Value = 1, },
 						SoftnessX1 = Input {
-							Expression = "IntroBlur.Value + (OutroRamp.Value * Text1.OutroBlurAmount)",
+							SourceOp = "SoftnessCalc",
+							Source = "Result",
 						},
 						SoftnessY1 = Input {
-							Expression = "IntroBlur.Value + (OutroRamp.Value * Text1.OutroBlurAmount)",
+							SourceOp = "SoftnessCalc",
+							Source = "Result",
 						},
 					},
 				},
@@ -323,6 +264,57 @@
 					},
 					SplineColor = { Red = 255, Green = 255, Blue = 255 },
 				},
+				Path1 = PolyPath {
+					DrawMode = "InsertAndModify",
+					Inputs = {
+						Displacement = Input {
+							SourceOp = "IntroMotion",
+							Source = "Value",
+						},
+						PolyLine = Input {
+							Value = Polyline {
+								Points = {
+									{ Linear = true, LockY = true, X = -0.5, Y = -1.3, RX = 0, RY = 0.433333333333333 },
+									{ Linear = true, LockY = true, X = -0.5, Y = -0.5, LX = 0, LY = -0.266666666666667 }
+								}
+							},
+						},
+					},
+				},
+				OutroHold = LUTLookup {
+					CtrlWZoom = false,
+					Inputs = {
+						Source = Input { Value = FuID { "Duration" }, },
+						Curve = Input { Value = FuID { "Custom" }, },
+						Lookup = Input {
+							SourceOp = "OutroHoldLookup",
+							Source = "Value",
+						},
+					},
+				},
+				OutroHoldLookup = LUTBezier {
+					KeyColorSplines = {
+						[0] = {
+							[0] = { 1, RH = { 0.273333333333333, 1 }, Flags = { Linear = true } },
+							[0.82] = { 1, LH = { 0.546666666666667, 1 }, RH = { 0.88, 0.666666666666667 }, Flags = { Linear = true } },
+							[1] = { 0, LH = { 0.94, 0.333333333333333 }, Flags = { Linear = true } }
+						}
+					},
+					SplineColor = { Red = 255, Green = 255, Blue = 255 },
+				},
+				OpacityCalc = Calculation {
+					Inputs = {
+						FirstOperand = Input {
+							SourceOp = "IntroMotion",
+							Source = "Value",
+						},
+						Operator = Input { Value = 2, },
+						SecondOperand = Input {
+							SourceOp = "OutroHold",
+							Source = "Value",
+						},
+					},
+				},
 				IntroBlur = LUTLookup {
 					CtrlWZoom = false,
 					Inputs = {
@@ -345,19 +337,38 @@
 					},
 					SplineColor = { Red = 255, Green = 255, Blue = 255 },
 				},
-				OutroRamp = LUTLookup {
+				OutroBlur = LUTLookup {
 					CtrlWZoom = false,
 					Inputs = {
 						Source = Input { Value = FuID { "Duration" }, },
+						Curve = Input { Value = FuID { "Custom" }, },
 						Lookup = Input {
-							SourceOp = "LinearLookup",
+							SourceOp = "OutroBlurLookup",
 							Source = "Value",
 						},
-						Scale = Input {
-							Expression = "1 / iif(Text1.OutroLength < 0.01, 0.01, Text1.OutroLength)",
+						Scale = Input { Value = 5, },
+					},
+				},
+				OutroBlurLookup = LUTBezier {
+					KeyColorSplines = {
+						[0] = {
+							[0] = { 0, RH = { 0.273333333333333, 0 }, Flags = { Linear = true } },
+							[0.8] = { 0, LH = { 0.546666666666667, 0 }, RH = { 0.866666666666667, 0.333333333333333 }, Flags = { Linear = true } },
+							[1] = { 1, LH = { 0.933333333333333, 0.666666666666667 }, Flags = { Linear = true } }
+						}
+					},
+					SplineColor = { Red = 255, Green = 255, Blue = 255 },
+				},
+				SoftnessCalc = Calculation {
+					Inputs = {
+						FirstOperand = Input {
+							SourceOp = "IntroBlur",
+							Source = "Value",
 						},
-						Offset = Input {
-							Expression = "1 - (1 / iif(Text1.OutroLength < 0.01, 0.01, Text1.OutroLength))",
+						Operator = Input { Value = 1, },
+						SecondOperand = Input {
+							SourceOp = "OutroBlur",
+							Source = "Value",
 						},
 					},
 				}

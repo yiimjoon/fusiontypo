@@ -16,6 +16,11 @@ New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
 New-Item -ItemType Directory -Force -Path $macroTargetDir | Out-Null
 New-Item -ItemType Directory -Force -Path $distDir | Out-Null
 
+$legacyAltTitle = Join-Path $targetDir "Titles\\Codex Rise Fade Pro Alt.setting"
+if (Test-Path $legacyAltTitle) {
+    Remove-Item -LiteralPath $legacyAltTitle -Force
+}
+
 Copy-Item -Path (Join-Path $sourceDir "*") -Destination $targetDir -Recurse -Force
 if (Test-Path $macroSourceDir) {
     Copy-Item -Path (Join-Path $macroSourceDir "*") -Destination $macroTargetDir -Recurse -Force
@@ -35,7 +40,9 @@ Rename-Item -LiteralPath $zipPath -NewName (Split-Path $drfx -Leaf)
 Write-Host "Installed presets to:"
 Write-Host "  $targetDir\\Titles\\Codex Rise Fade.setting"
 Write-Host "  $targetDir\\Titles\\Codex Rise Fade Pro.setting"
-Write-Host "  $targetDir\\Titles\\Codex Rise Fade Pro Alt.setting"
+Write-Host "  $targetDir\\Titles\\Codex Rise Fade Pro Left.setting"
+Write-Host "  $targetDir\\Titles\\Codex Rise Fade Pro Right.setting"
+Write-Host "  $targetDir\\Titles\\Codex Rise Fade Pro Down.setting"
 Write-Host "  $targetDir\\Titles\\Codex Mask Reveal Pro.setting"
 Write-Host "  $targetDir\\Effects\\Codex 3D Arc Image.setting"
 Write-Host "  $targetDir\\Effects\\Codex Rise Fade Image.setting"

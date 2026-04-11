@@ -1,6 +1,6 @@
 {
 	Tools = ordered() {
-		CodexMaskRevealPro = GroupOperator {
+		CodexRiseFadeProDown = GroupOperator {
 			CtrlWZoom = false,
 			Inputs = ordered() {
 				Input1 = InstanceInput {
@@ -83,48 +83,48 @@
 					SourceOp = "IntroBlur",
 					Source = "Scale",
 					Name = "Intro Blur",
-					Default = 4,
+					Default = 5,
 				},
 				Input15 = InstanceInput {
-					SourceOp = "RevealMask",
-					Source = "SoftEdge",
-					Name = "Reveal Softness",
-					Default = 0.008,
-				},
-				Input16 = InstanceInput {
 					SourceOp = "OutroBlur",
 					Source = "Scale",
 					Name = "Outro Blur",
 					Default = 5,
 				},
-				Input17 = InstanceInput {
+				Input16 = InstanceInput {
 					SourceOp = "Follower1",
 					Source = "Delay",
 					Name = "Character Stagger",
 					Default = 0,
 				},
-				Input18 = InstanceInput {
+				Input17 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "MotionBlur",
 					Name = "Motion Blur",
 					Default = 1,
 				},
-				Input19 = InstanceInput {
+				Input18 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "Quality",
 					Name = "Quality",
 					Default = 2,
 				},
-				Input20 = InstanceInput {
+				Input19 = InstanceInput {
 					SourceOp = "Text1",
 					Source = "ShutterAngle",
 					Name = "Shutter Angle",
 					Default = 180,
+				},
+				Input20 = InstanceInput {
+					SourceOp = "TimeStretcher1",
+					Source = "PosterizeFrames",
+					Name = "Stop Motion Frames",
+					Default = 1,
 				}
 			},
 			Outputs = {
 				MainOutput1 = InstanceOutput {
-					SourceOp = "Text1",
+					SourceOp = "TimeStretcher1",
 					Source = "Output",
 					Name = "Output",
 				}
@@ -137,7 +137,7 @@
 					AutoSnap = true,
 					RemoveRouters = true
 				},
-				Size = { 381, 66.3636, 190.5, 24.2424 },
+				Size = { 354, 66.3636, 177, 24.2424 },
 				Direction = "Horizontal",
 				PipeStyle = "Direct",
 				Scale = 1,
@@ -163,10 +163,6 @@
 						Green1 = Input { Value = 1, },
 						Blue1 = Input { Value = 1, },
 						Alpha1 = Input { Value = 1, },
-						EffectMask = Input {
-							SourceOp = "RevealMask",
-							Source = "Mask",
-						},
 						StyledText = Input {
 							SourceOp = "Follower1",
 							Source = "StyledText",
@@ -187,6 +183,33 @@
 						},
 					},
 					ViewInfo = OperatorInfo { Pos = { 0, 8.75758 } },
+				},
+				TimeStretcher1 = TimeStretcher {
+					CtrlWZoom = false,
+					UserControls = ordered() {
+						PosterizeFrames = {
+							LINKS_Name = "Stop Motion Frames",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Integer = true,
+							INP_Default = 1,
+							INP_MinScale = 1,
+							INP_MaxScale = 12,
+						},
+					},
+					Inputs = {
+						SourceTime = Input {
+							Expression = "floor(time/TimeStretcher1.PosterizeFrames)*TimeStretcher1.PosterizeFrames",
+						},
+						InterpolateBetweenFrames = Input { Value = 0, },
+						Input = Input {
+							SourceOp = "Text1",
+							Source = "Output",
+						},
+						PosterizeFrames = Input { Value = 1, },
+					},
+					ViewInfo = OperatorInfo { Pos = { 70, 8.75758 } },
 				},
 				Follower1 = StyledTextFollower {
 					Inputs = {
@@ -217,27 +240,6 @@
 							Source = "Result",
 						},
 					},
-				},
-				RevealMask = RectangleMask {
-					Inputs = {
-						Filter = Input { Value = FuID { "Fast Gaussian" }, },
-						MaskWidth = Input { Value = 1920, },
-						MaskHeight = Input { Value = 1080, },
-						PixelAspect = Input { Value = { 1, 1 }, },
-						UseFrameFormatSettings = Input { Value = 1, },
-						ClippingMode = Input { Value = FuID { "None" }, },
-						Center = Input {
-							SourceOp = "MaskPath",
-							Source = "Position",
-						},
-						Width = Input {
-							SourceOp = "MaskWidthCalc",
-							Source = "Result",
-						},
-						Height = Input { Value = 2.2, },
-						SoftEdge = Input { Value = 0.008, },
-					},
-					ViewInfo = OperatorInfo { Pos = { 176, 96 } },
 				},
 				IntroMotion = LUTLookup {
 					CtrlWZoom = false,
@@ -272,38 +274,11 @@
 						PolyLine = Input {
 							Value = Polyline {
 								Points = {
-									{ Linear = true, LockY = true, X = -0.8, Y = -0.5, RX = 0.1, RY = 0 },
-									{ Linear = true, LockY = true, X = -0.5, Y = -0.5, LX = -0.1, LY = 0 }
+									{ Linear = true, LockY = true, X = -0.5, Y = 0.3, RX = 0, RY = -0.433333333333333 },
+									{ Linear = true, LockY = true, X = -0.5, Y = -0.5, LX = 0, LY = -0.266666666666667 }
 								}
 							},
 						},
-					},
-				},
-				MaskPath = PolyPath {
-					DrawMode = "InsertAndModify",
-					Inputs = {
-						Displacement = Input {
-							SourceOp = "IntroMotion",
-							Source = "Value",
-						},
-						PolyLine = Input {
-							Value = Polyline {
-								Points = {
-									{ Linear = true, LockY = true, X = 0.0005, Y = 0.5, RX = 0.1665, RY = 0 },
-									{ Linear = true, LockY = true, X = 0.5, Y = 0.5, LX = -0.1665, LY = 0 }
-								}
-							},
-						},
-					},
-				},
-				MaskWidthCalc = Calculation {
-					Inputs = {
-						FirstOperand = Input {
-							SourceOp = "IntroMotion",
-							Source = "Value",
-						},
-						Operator = Input { Value = 1, },
-						SecondOperand = Input { Value = 0.001, },
 					},
 				},
 				OutroHold = LUTLookup {
@@ -349,7 +324,7 @@
 							SourceOp = "IntroBlurLookup",
 							Source = "Value",
 						},
-						Scale = Input { Value = 4, },
+						Scale = Input { Value = 5, },
 					},
 				},
 				IntroBlurLookup = LUTBezier {
@@ -400,5 +375,5 @@
 			},
 		}
 	},
-	ActiveTool = "CodexMaskRevealPro"
+	ActiveTool = "CodexRiseFadeProDown"
 }
