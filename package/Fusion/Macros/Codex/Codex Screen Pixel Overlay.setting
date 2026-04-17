@@ -1,0 +1,201 @@
+{
+	Tools = ordered() {
+		CodexScreenPixelOverlay = GroupOperator {
+			CtrlWZoom = false,
+			Inputs = ordered() {
+				Input1 = InstanceInput {
+					SourceOp = "Transform1",
+					Source = "Input",
+					Name = "Input",
+				},
+				Input2 = InstanceInput {
+					SourceOp = "Merge1",
+					Source = "Blend",
+					Name = "Pixel Grid Strength",
+					Default = 0.55,
+				},
+				Input3 = InstanceInput {
+					SourceOp = "Merge2",
+					Source = "Blend",
+					Name = "Scanline Strength",
+					Default = 0.35,
+				},
+				Input4 = InstanceInput {
+					SourceOp = "sGrid1",
+					Source = "Coverage",
+					Name = "Coverage",
+					Default = 1.25,
+				},
+			},
+			Outputs = {
+				MainOutput1 = InstanceOutput {
+					SourceOp = "Merge2",
+					Source = "Output",
+					Name = "Output",
+				}
+			},
+			ViewInfo = GroupInfo {
+				Pos = { 209, 49.5 },
+				Flags = {
+					AllowPan = false,
+					ConnectedSnap = true,
+					AutoSnap = true,
+					RemoveRouters = true
+				},
+				Size = { 330, 66.3636, 165, 24.2424 },
+				Direction = "Horizontal",
+				PipeStyle = "Direct",
+				Scale = 1,
+				Offset = { 0, 0 }
+			},
+			Tools = ordered() {
+				Transform1 = Transform {
+					CtrlWZoom = false,
+					ViewInfo = OperatorInfo { Pos = { -540, 0 } },
+				},
+				sRectangle1 = sRectangle {
+					Inputs = {
+						Width = Input { Value = 0.0009, },
+						Height = Input { Value = 1, },
+						Red = Input { Value = 0.65, },
+						Green = Input { Value = 0.95, },
+					},
+					ViewInfo = OperatorInfo { Pos = { -360, -120 } },
+				},
+				sGrid1 = sGrid {
+					UserControls = ordered() {
+						Coverage = {
+							LINKS_Name = "Coverage",
+							LINKID_DataType = "Number",
+							INPID_InputControl = "SliderControl",
+							INPID_PreviewControl = "None",
+							INP_Default = 1.25,
+							INP_MinScale = 1,
+							INP_MaxScale = 2,
+						},
+					},
+					Inputs = {
+						CellsX = Input {
+							Expression = "320 * sGrid1.Coverage",
+						},
+						CellsY = Input { Value = 1, },
+						XOffset = Input { Value = 0.0031, },
+						YOffset = Input { Value = 0, },
+						Coverage = Input { Value = 1.25, },
+						Input = Input {
+							SourceOp = "sRectangle1",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { -180, -120 } },
+				},
+				sRender1 = sRender {
+					Inputs = {
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+						Input = Input {
+							SourceOp = "sGrid1",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 0, -120 } },
+				},
+				TransformGrid = Transform {
+					Inputs = {
+						Size = Input {
+							Expression = "sGrid1.Coverage",
+						},
+						Input = Input {
+							SourceOp = "sRender1",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 90, -120 } },
+				},
+				Merge1 = Merge {
+					Inputs = {
+						Blend = Input { Value = 0.55, },
+						Background = Input {
+							SourceOp = "Transform1",
+							Source = "Output",
+						},
+						Foreground = Input {
+							SourceOp = "TransformGrid",
+							Source = "Output",
+						},
+						PerformDepthMerge = Input { Value = 0, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 180, 0 } },
+				},
+				sRectangle2 = sRectangle {
+					Inputs = {
+						Width = Input { Value = 1, },
+						Height = Input { Value = 0.0012, },
+						Red = Input { Value = 0, },
+						Green = Input { Value = 0, },
+						Blue = Input { Value = 0, }
+					},
+					ViewInfo = OperatorInfo { Pos = { -360, 120 } },
+				},
+				sGrid2 = sGrid {
+					Inputs = {
+						CellsX = Input { Value = 1, },
+						CellsY = Input {
+							Expression = "270 * sGrid1.Coverage",
+						},
+						XOffset = Input { Value = 0, },
+						YOffset = Input { Value = 0.0037, },
+						Input = Input {
+							SourceOp = "sRectangle2",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { -180, 120 } },
+				},
+				sRender2 = sRender {
+					Inputs = {
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+						Input = Input {
+							SourceOp = "sGrid2",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 0, 120 } },
+				},
+				TransformScan = Transform {
+					Inputs = {
+						Size = Input {
+							Expression = "sGrid1.Coverage",
+						},
+						Input = Input {
+							SourceOp = "sRender2",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 90, 120 } },
+				},
+				Merge2 = Merge {
+					Inputs = {
+						Blend = Input { Value = 0.35, },
+						Background = Input {
+							SourceOp = "Merge1",
+							Source = "Output",
+						},
+						Foreground = Input {
+							SourceOp = "TransformScan",
+							Source = "Output",
+						},
+						PerformDepthMerge = Input { Value = 0, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 360, 0 } },
+				},
+			},
+		}
+	},
+	ActiveTool = "CodexScreenPixelOverlay"
+}
