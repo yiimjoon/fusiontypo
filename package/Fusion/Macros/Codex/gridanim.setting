@@ -1,0 +1,320 @@
+{
+	Tools = ordered() {
+		gridanim = MacroOperator {
+			CtrlWZoom = false,
+			Inputs = ordered() {
+				MainInput1 = InstanceInput {
+					SourceOp = "Merge6",
+					Source = "Background",
+					Name = "Background",
+				},
+				Input1 = InstanceInput {
+					SourceOp = "Merge6",
+					Source = "Blend",
+					Name = "Vertical Strength",
+					Default = 0.52,
+				},
+				Input2 = InstanceInput {
+					SourceOp = "Merge7",
+					Source = "Blend",
+					Name = "Horizontal Strength",
+					Default = 0.52,
+				},
+				Input3 = InstanceInput {
+					SourceOp = "Polygon1",
+					Source = "BorderWidth",
+					Name = "Vertical Line Softness",
+					Default = 0.00125,
+				},
+				Input4 = InstanceInput {
+					SourceOp = "Polygon1_1",
+					Source = "BorderWidth",
+					Name = "Horizontal Line Softness",
+					Default = 0.00125,
+				},
+				Input5 = InstanceInput {
+					SourceOp = "Duplicate1",
+					Source = "Center",
+					Name = "Grid Spacing",
+					Default = { 0.56, 0.5 },
+				},
+				Input6 = InstanceInput {
+					SourceOp = "Background4",
+					Source = "TopLeftRed",
+					Name = "Line Red",
+					Default = 1,
+				},
+				Input7 = InstanceInput {
+					SourceOp = "Background4",
+					Source = "TopLeftGreen",
+					Name = "Line Green",
+					Default = 1,
+				},
+				Input8 = InstanceInput {
+					SourceOp = "Background4",
+					Source = "TopLeftBlue",
+					Name = "Line Blue",
+					Default = 1,
+				},
+				Input9 = InstanceInput {
+					SourceOp = "Background5",
+					Source = "TopLeftRed",
+					Name = "Base Red",
+					Default = 0.137254901960784,
+				},
+				Input10 = InstanceInput {
+					SourceOp = "Background5",
+					Source = "TopLeftGreen",
+					Name = "Base Green",
+					Default = 0.498039215686275,
+				},
+				Input11 = InstanceInput {
+					SourceOp = "Background5",
+					Source = "TopLeftBlue",
+					Name = "Base Blue",
+					Default = 0.168627450980392,
+				}
+			},
+			Outputs = {
+				MainOutput1 = InstanceOutput {
+					SourceOp = "Merge7",
+					Source = "Output",
+					Name = "Output",
+				}
+			},
+			ViewInfo = GroupInfo { Pos = { 0, 0 } },
+			Tools = ordered() {
+				Underlay1 = Underlay {
+					CtrlWZoom = false,
+					CtrlWShown = false,
+					ViewInfo = UnderlayInfo {
+						Pos = { 1554.8, -73.9555 },
+						Size = { 589.778, 210.525 }
+					},
+				},
+				Merge7 = Merge {
+					CtrlWShown = false,
+					Inputs = {
+						Blend = Input { Value = 0.52, },
+						Background = Input {
+							SourceOp = "Merge6",
+							Source = "Output",
+						},
+						Foreground = Input {
+							SourceOp = "Duplicate1_1",
+							Source = "Output",
+						},
+						PerformDepthMerge = Input { Value = 0, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 1763.69, 76.0368 } },
+				},
+				Merge6 = Merge {
+					CtrlWShown = false,
+					Inputs = {
+						Blend = Input { Value = 0.52, },
+						Background = Input {
+							SourceOp = "Background5",
+							Source = "Output",
+						},
+						Foreground = Input {
+							SourceOp = "Duplicate1",
+							Source = "Output",
+						},
+						PerformDepthMerge = Input { Value = 0, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 1748.3, -4.5305 } },
+				},
+				Background4 = Background {
+					CtrlWShown = false,
+					Inputs = {
+						EffectMask = Input {
+							SourceOp = "Polygon1",
+							Source = "Mask",
+						},
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+						TopLeftRed = Input { Value = 1, },
+						TopLeftGreen = Input { Value = 1, },
+						TopLeftBlue = Input { Value = 1, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 1500.01, -2.81631 } },
+				},
+				Background4_1 = Background {
+					CtrlWShown = false,
+					Inputs = {
+						EffectMask = Input {
+							SourceOp = "Polygon1_1",
+							Source = "Mask",
+						},
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+						TopLeftRed = Input {
+							Value = 1,
+							Expression = "Background4.TopLeftRed",
+						},
+						TopLeftGreen = Input {
+							Value = 1,
+							Expression = "Background4.TopLeftGreen",
+						},
+						TopLeftBlue = Input {
+							Value = 1,
+							Expression = "Background4.TopLeftBlue",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 1515.4, 77.751 } },
+				},
+				Polygon1_1 = PolylineMask {
+					DrawMode = "InsertAndModify",
+					DrawMode2 = "InsertAndModify",
+					CtrlWShown = false,
+					Inputs = {
+						Filter = Input { Value = FuID { "Fast Gaussian" }, },
+						BorderWidth = Input { Value = 0.00125, },
+						WriteLength = Input {
+							SourceOp = "Polygon1_1Length",
+							Source = "Value",
+						},
+						MaskWidth = Input { Value = 1920, },
+						MaskHeight = Input { Value = 1080, },
+						PixelAspect = Input { Value = { 1, 1 }, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						ClippingMode = Input { Value = FuID { "None" }, },
+						Polyline = Input {
+							Value = Polyline {
+								Points = {
+									{ Linear = true, X = -0.501, Y = -0.49, RX = 0.334, RY = 0, PublishID = "Point0" },
+									{ Linear = true, X = 0.501, Y = -0.49, LX = -0.334, LY = 0, PublishID = "Point1" }
+								}
+							},
+						},
+						Polyline2 = Input {
+							Value = Polyline {
+							},
+							Disabled = true,
+						},
+						Point0 = Input { Value = { -0.001, 0.01 }, },
+						Point1 = Input { Value = { 1.001, 0.01 }, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 1353.24, 88.463 } },
+				},
+				Polygon1_1Length = BezierSpline {
+					SplineColor = { Red = 141, Green = 167, Blue = 243 },
+					CtrlWZoom = false,
+					KeyFrames = {
+						[6] = { 0, RH = { 18.9090909090909, 0 } },
+						[24] = { 1, LH = { 11.0909090909091, 1 } }
+					}
+				},
+				Polygon1 = PolylineMask {
+					DrawMode = "InsertAndModify",
+					DrawMode2 = "InsertAndModify",
+					CtrlWShown = false,
+					Inputs = {
+						Filter = Input { Value = FuID { "Fast Gaussian" }, },
+						BorderWidth = Input { Value = 0.00125, },
+						WritePosition = Input {
+							SourceOp = "Polygon1Position",
+							Source = "Value",
+						},
+						MaskWidth = Input { Value = 1920, },
+						MaskHeight = Input { Value = 1080, },
+						PixelAspect = Input { Value = { 1, 1 }, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						ClippingMode = Input { Value = FuID { "None" }, },
+						Polyline = Input {
+							SourceOp = "Polygon1Polyline",
+							Source = "Value",
+						},
+						Polyline2 = Input {
+							Value = Polyline {
+							},
+							Disabled = true,
+						},
+						Point0 = Input { Value = { 0.01, 1.001 }, },
+						Point1 = Input { Value = { 0.01, -0.01 }, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 1337.85, 7.89574 } },
+				},
+				Polygon1Position = BezierSpline {
+					SplineColor = { Red = 237, Green = 132, Blue = 6 },
+					CtrlWZoom = false,
+					KeyFrames = {
+						[0] = { 1, RH = { 7.03030303030303, 1 } },
+						[12] = { 0, LH = { 4.96969696969697, 0 } }
+					}
+				},
+				Polygon1Polyline = BezierSpline {
+					SplineColor = { Red = 173, Green = 255, Blue = 47 },
+					CtrlWZoom = false,
+					KeyFrames = {
+						[7] = { 0, Flags = { Linear = true, LockedY = true }, Value = Polyline {
+								Points = {
+									{ Linear = true, X = -0.49, Y = 0.501, RX = 0, RY = -0.337, PublishID = "Point0" },
+									{ Linear = true, X = -0.49, Y = -0.51, LX = 0, LY = 0.337, PublishID = "Point1" }
+								}
+							} }
+					}
+				},
+				Duplicate1 = Fuse.Duplicate {
+					CtrlWShown = false,
+					Inputs = {
+						Copies = Input {
+							Value = 17,
+							Expression = "floor(1/(Center.X - 0.5)) + 1",
+						},
+						Center = Input { Value = { 0.56, 0.5 }, },
+						Polyline = Input {
+							Value = Polyline {
+							},
+						},
+						Background = Input {
+							SourceOp = "Background4",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 1638.3, -4.5305 } },
+				},
+				Duplicate1_1 = Fuse.Duplicate {
+					CtrlWShown = false,
+					Inputs = {
+						Copies = Input {
+							Value = 30,
+							Expression = "floor(1/(Center.Y - 0.5)) + 1",
+						},
+						Center = Input {
+							Value = { 0.5, 0.53375 },
+							Expression = "Point(0.5, 0.5 + 9*(Duplicate1.Center.X - 0.5)/16)",
+						},
+						Polyline = Input {
+							Value = Polyline {
+							},
+						},
+						Background = Input {
+							SourceOp = "Background4_1",
+							Source = "Output",
+						}
+					},
+					ViewInfo = OperatorInfo { Pos = { 1653.69, 76.0368 } },
+				},
+				Background5 = Background {
+					CtrlWShown = false,
+					Inputs = {
+						Width = Input { Value = 1920, },
+						Height = Input { Value = 1080, },
+						UseFrameFormatSettings = Input { Value = 1, },
+						["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+						TopLeftRed = Input { Value = 0.137254901960784, },
+						TopLeftGreen = Input { Value = 0.498039215686275, },
+						TopLeftBlue = Input { Value = 0.168627450980392, }
+					},
+					ViewInfo = OperatorInfo { Pos = { 1651.81, -73.9555 } },
+				}
+			},
+		}
+	},
+	ActiveTool = "gridanim"
+}
